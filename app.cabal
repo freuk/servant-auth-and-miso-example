@@ -1,0 +1,187 @@
+cabal-version: 2.0
+name: app
+version: 1.0.0
+license: BSD3
+maintainer: fre@freux.fr
+author: Valentin Reis
+synopsis: client
+description: desc
+category: web
+build-type: Simple
+
+source-repository head
+    type: git
+
+library serverlib
+    if impl(ghcjs)
+      buildable: False
+    exposed-modules:
+        App.ApiAuth,
+        App.Docs,
+        App.Api,
+        App.Types,
+        App.Html,
+        App.Server
+    hs-source-dirs: server, common
+    default-language: Haskell2010
+    default-extensions: LambdaCase QuasiQuotes DefaultSignatures
+                        OverloadedLists ExistentialQuantification RecordWildCards
+                        RankNTypes TypeSynonymInstances StandaloneDeriving
+                        FlexibleInstances TupleSections MultiParamTypeClasses
+                        NoImplicitPrelude OverloadedStrings ViewPatterns PatternSynonyms
+                        DeriveFunctor DeriveTraversable TypeFamilies DeriveAnyClass
+                        DeriveGeneric DeriveDataTypeable OverloadedLabels DeriveFoldable
+                        DerivingStrategies TypeApplications MultiWayIf NoTemplateHaskell
+                        BlockArguments GADTs FlexibleContexts TypeOperators DataKinds
+                        PolyKinds AllowAmbiguousTypes FunctionalDependencies
+                        UndecidableInstances
+    ghc-options: -Wall -O0 -Wcompat -Wincomplete-uni-patterns
+                 -Wmissing-home-modules -Widentities -Wredundant-constraints
+                 -Wcpp-undef -fwarn-tabs -fwarn-unused-imports
+                 -fwarn-missing-signatures -fwarn-name-shadowing
+                 -fprint-potential-instances -Wmissing-export-lists
+                 -fwarn-unused-do-bind -fwarn-wrong-do-bind
+                 -fwarn-incomplete-patterns -Wincomplete-record-updates
+                 -Wmonomorphism-restriction -Wimplicit-prelude
+                 -Wmissing-local-signatures -Wmissing-exported-signatures
+                 -Wmissing-export-lists -Wmissing-home-modules -Widentities
+                 -Wredundant-constraints -Wpartial-fields
+    build-depends:
+        swagger2 -any,
+        protolude -any,
+        generic-lens -any,
+        containers -any,
+        lens -any,
+        aeson -any,
+        servant-docs -any,
+        miso -any,
+        servant-lucid -any,
+        cookie -any,
+        lucid -any,
+        swagger2 -any,
+        network-uri -any,
+        servant-server -any,
+        servant-auth-server -any,
+        servant -any,
+        servant-swagger -any,
+        servant-auth-swagger -any,
+        servant-auth -any,
+        servant-auth-docs -any,
+        exceptions -any,
+        generic-lens -any,
+        random -any,
+        containers -any,
+        lens -any,
+        aeson -any,
+        network-uri -any,
+        servant -any,
+        http-types -any,
+        pcre-heavy -any,
+        lucid -any,
+        mtl -any,
+        mono-traversable -any,
+        servant-lucid -any,
+        servant-server -any,
+        bytestring -any,
+        file-embed -any,
+        directory -any,
+        time -any,
+        wai-app-static -any,
+        servant-auth-server -any,
+        stm -any,
+        text -any,
+        wai -any,
+        wai-extra -any,
+        warp -any
+
+executable docs
+    if impl(ghcjs)
+      buildable: False
+    main-is: bin/Docs.hs
+    default-extensions: NoImplicitPrelude
+    default-language: Haskell2010
+    ghc-options: -main-is Docs
+    build-depends: serverlib -any
+
+executable server
+    main-is: bin/Server.hs
+    if impl(ghcjs)
+      buildable: False
+    else
+      default-extensions: NoImplicitPrelude
+      default-language: Haskell2010
+      ghc-options:  -main-is Server
+      build-depends: serverlib -any
+
+executable client
+    main-is: Client.hs
+    hs-source-dirs: bin, client, common
+    other-modules:
+      App.XhrClient,
+      App.Client,
+      App.MisoProtolude,
+      App.Api,
+      App.Types
+    default-language: Haskell2010
+    default-extensions: LambdaCase QuasiQuotes DefaultSignatures
+                        OverloadedLists ExistentialQuantification RecordWildCards
+                        RankNTypes TypeSynonymInstances StandaloneDeriving
+                        FlexibleInstances TupleSections MultiParamTypeClasses
+                        NoImplicitPrelude OverloadedStrings ViewPatterns PatternSynonyms
+                        DeriveFunctor DeriveTraversable TypeFamilies DeriveAnyClass
+                        DeriveGeneric DeriveDataTypeable OverloadedLabels DeriveFoldable
+                        DerivingStrategies TypeApplications MultiWayIf NoTemplateHaskell
+                        BlockArguments GADTs FlexibleContexts TypeOperators DataKinds
+                        PolyKinds AllowAmbiguousTypes FunctionalDependencies
+                        UndecidableInstances CPP
+    ghc-options: -Wall -O0 -Wcompat -Wincomplete-uni-patterns
+                 -Wmissing-home-modules -Widentities -Wredundant-constraints
+                 -Wcpp-undef -fwarn-tabs -fwarn-unused-imports
+                 -fwarn-missing-signatures -fwarn-name-shadowing
+                 -fprint-potential-instances -Wmissing-export-lists
+                 -fwarn-unused-do-bind -fwarn-wrong-do-bind
+                 -fwarn-incomplete-patterns -Wincomplete-record-updates
+                 -Wmonomorphism-restriction -Wimplicit-prelude
+                 -Wmissing-local-signatures -Wmissing-exported-signatures
+                 -Wmissing-export-lists -Wmissing-home-modules -Widentities
+                 -Wredundant-constraints -Wpartial-fields -main-is Client
+    ghcjs-options: -dedupe
+    build-depends:
+        base -any,
+        protolude -any,
+        generic-lens -any,
+        miso -any,
+        containers -any,
+        lens -any,
+        aeson -any,
+        mtl -any,
+        servant-auth-client -any,
+        servant-auth -any,
+        network-uri -any,
+        servant -any,
+        bytestring -any,
+        case-insensitive -any,
+        containers -any,
+        exceptions -any,
+        http-media -any,
+        servant-client-core -any,
+        http-types -any,
+        monad-control -any,
+        mtl -any,
+        lucid -any,
+        servant-lucid -any,
+        servant-docs -any,
+        cookie -any,
+        semigroupoids -any,
+        string-conversions -any,
+        transformers-base -any,
+        jsaddle,
+        transformers -any
+
+    if impl(ghcjs)
+        build-depends:
+            ghcjs-prim -any,
+            ghcjs-base -any
+    else
+        build-depends:
+

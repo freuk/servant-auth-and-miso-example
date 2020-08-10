@@ -1,0 +1,5 @@
+dhall-to-cabal
+.ghc*
+result
+**/result
+dist*
